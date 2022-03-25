@@ -1,10 +1,11 @@
-import { FC, useEffect, createContext, useState } from "react";
+import { FC, useEffect, createContext, useReducer } from "react";
 import type { User } from "../@types";
 import LoginScreen from "../screens/LoginScreen";
 import SplashScreen from "../screens/SplashScreen";
+import { authStoreInitialState, authStoreReducer } from "../store/authStore";
 
 interface IAuthContext {
-  user: User | null;
+  user: User | null | undefined;
   login: (user: User) => void;
   logout: () => void;
 }
@@ -12,23 +13,22 @@ interface IAuthContext {
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 const AuthContextProvider: FC = ({ children }) => {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  const [state, dispatch] = useReducer(authStoreReducer, authStoreInitialState);
 
-  const login = (user: User) => setUser(user);
+  const login = (user: User) => dispatch({ type: "LOGIN", payload: user });
 
-  const logout = () => setUser(null);
+  const logout = () => dispatch({ type: "LOGOUT" });
 
   useEffect(() => {
     // TODO: fetch user from API
-    setTimeout(() => setLoading(false), 2000);
+    setTimeout(() => login({ id: 1, name: "John Doe", email: "raynirola@gmail.com" }), 2000);
   }, []);
 
-  if (loading) return <SplashScreen />;
+  if (state.loading) return <SplashScreen />;
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {user ? children : <LoginScreen login={login} />}
+    <AuthContext.Provider value={{ user: state.user, login, logout }}>
+      {state.user ? children : <LoginScreen login={login} />}
     </AuthContext.Provider>
   );
 };

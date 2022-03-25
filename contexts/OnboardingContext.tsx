@@ -1,23 +1,25 @@
-import { FC, useEffect, createContext, useState } from "react";
+import { FC, useEffect, createContext, useReducer } from "react";
 import SplashScreen from "../screens/SplashScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
+import { onboardingStoreInitialState, onboardingStoreReducer } from "../store/onboardingStore";
 
 export const OnboardingContext = createContext<boolean>(true);
 
 const OnboardingContextProvider: FC = ({ children }) => {
-  const [loading, setLoading] = useState(true);
-  const [onboarding, setOnboarding] = useState(true);
+  const [state, dispatch] = useReducer(onboardingStoreReducer, onboardingStoreInitialState);
+
+  const setOnboarding = (value: boolean) => dispatch({ type: "UPDATE", payload: value });
 
   useEffect(() => {
     // TODO: Check if the app is first time opened
-    setTimeout(() => setLoading(false), 2000);
+    setTimeout(() => setOnboarding(true), 2000);
   }, []);
 
-  if (loading) return <SplashScreen />;
+  if (state.loading) return <SplashScreen />;
 
   return (
-    <OnboardingContext.Provider value={onboarding}>
-      {onboarding ? <OnboardingScreen setOnboarding={setOnboarding} /> : children}
+    <OnboardingContext.Provider value={state.onboarding}>
+      {state.onboarding ? <OnboardingScreen setOnboarding={setOnboarding} /> : children}
     </OnboardingContext.Provider>
   );
 };
