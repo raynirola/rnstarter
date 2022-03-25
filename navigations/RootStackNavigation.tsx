@@ -1,7 +1,7 @@
 import { createNativeStackNavigator, NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { FC } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import { useOnboarding } from "../contexts/OnboardingContext";
+import useAuth from "../hooks/useAuth";
+import useOnboarding from "../hooks/useOnboarding";
 import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";

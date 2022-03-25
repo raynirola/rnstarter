@@ -2,7 +2,7 @@ import { FC, useEffect, useContext, createContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SplashScreen from "../screens/SplashScreen";
 
-const OnboardingContext = createContext<boolean>(true);
+export const OnboardingContext = createContext<boolean>(true);
 
 const OnboardingContextProvider: FC = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,10 @@ const OnboardingContextProvider: FC = ({ children }) => {
         setOnboarding(JSON.parse(onboardingState));
         setLoading(false);
       } else {
-        setLoading(false);
+        setTimeout(() => {
+          setOnboarding(false);
+          setLoading(false);
+        }, 2000);
       }
     })();
   }, []);
@@ -25,6 +28,4 @@ const OnboardingContextProvider: FC = ({ children }) => {
   return <OnboardingContext.Provider value={onboarding}>{children}</OnboardingContext.Provider>;
 };
 
-const useOnboarding = () => useContext(OnboardingContext);
-
-export { OnboardingContextProvider, useOnboarding };
+export default OnboardingContextProvider;

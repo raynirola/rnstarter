@@ -8,7 +8,7 @@ interface IAuthContext {
   logout: () => void;
 }
 
-const AuthContext = createContext<IAuthContext>({} as IAuthContext);
+export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 const AuthContextProvider: FC = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -28,6 +28,4 @@ const AuthContextProvider: FC = ({ children }) => {
   return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
 };
 
-const useAuth = () => useContext(AuthContext);
-
-export { AuthContextProvider, useAuth };
+export default AuthContextProvider;

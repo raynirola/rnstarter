@@ -1,10 +1,15 @@
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, Pressable } from "react-native";
 import BaseContainer from "../components/BaseContainer";
+import useAuth from "../hooks/useAuth";
 
 const HomeScreen = () => {
+  const { user, logout } = useAuth();
   return (
     <BaseContainer style={styles.container}>
-      <Text style={styles.text}>Home Screen</Text>
+      <Text style={styles.text}>Welcome {user?.name}.</Text>
+      <Pressable onPress={logout}>
+        <Text>Logout</Text>
+      </Pressable>
     </BaseContainer>
   );
 };
