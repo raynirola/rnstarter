@@ -1,24 +1,18 @@
 import React from "react";
-import { Text, StyleSheet, Pressable } from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import { User } from "../@types";
 import BaseContainer from "../components/BaseContainer";
-import useAuth from "../hooks/useAuth";
 
-const LoginScreen = () => {
-  const { login } = useAuth();
+const LoginScreen = ({ login }: { login: (user: User) => void }) => {
+  const user = { id: "1", name: "Ray Nirola", email: "test@gmail.com" };
   return (
     <BaseContainer style={styles.container}>
-      <Text style={styles.text}>Login Screen</Text>
-      <Pressable
-        onPress={() =>
-          login({
-            id: 3,
-            name: "Ray Nirola",
-            email: "test@example.com",
-          })
-        }
-      >
-        <Text>Login</Text>
-      </Pressable>
+      <View style={styles.container}>
+        <Text>Login Screen</Text>
+      </View>
+      <TouchableOpacity style={styles.button} onPress={() => login(user)}>
+        <Text style={styles.label}>Login</Text>
+      </TouchableOpacity>
     </BaseContainer>
   );
 };
@@ -26,12 +20,21 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green",
     alignItems: "center",
     justifyContent: "center",
   },
-  text: {
+  button: {
+    width: "100%",
+    paddingVertical: 12,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "green",
+    borderRadius: 5,
+  },
+  label: {
     color: "white",
+    fontWeight: "600",
   },
 });
 

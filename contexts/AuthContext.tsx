@@ -1,5 +1,6 @@
-import { FC, useEffect, useContext, createContext, useState } from "react";
+import { FC, useEffect, createContext, useState } from "react";
 import type { User } from "../@types";
+import LoginScreen from "../screens/LoginScreen";
 import SplashScreen from "../screens/SplashScreen";
 
 interface IAuthContext {
@@ -19,13 +20,17 @@ const AuthContextProvider: FC = ({ children }) => {
   const logout = () => setUser(null);
 
   useEffect(() => {
-    setUser(() => ({ id: 1, name: "John Doe", email: "test@example.com" }));
+    // TODO: fetch user from API
     setTimeout(() => setLoading(false), 2000);
   }, []);
 
   if (loading) return <SplashScreen />;
 
-  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {user ? children : <LoginScreen login={login} />}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthContextProvider;
