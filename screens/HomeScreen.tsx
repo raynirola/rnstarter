@@ -6,7 +6,7 @@ import useAuth from "../hooks/useAuth";
 const HomeScreen = () => {
   const { user, logout } = useAuth();
   return (
-    <BaseContainer style={styles.container}>
+    <BaseContainer style={styles.container} optins={{ bounceBackgroundColor: "purple" }}>
       <View style={styles.container}>
         <Text style={styles.text}>Welcome {user?.name}.</Text>
       </View>

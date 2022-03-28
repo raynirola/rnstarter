@@ -1,31 +1,51 @@
 import { FC } from "react";
-import { StatusBar, StyleProp, View } from "react-native";
+import {
+  ScrollView,
+  ScrollViewProps,
+  StatusBar,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface IBaseContainer {
-  style?: StyleProp<any>;
+  style?: StyleProp<ViewStyle>;
+  optins?: Omit<ScrollViewProps, "contentContainerStyle | style"> & {
+    bounceBackgroundColor?: string;
+  };
 }
 
-const BaseContainer: FC<IBaseContainer> = ({ children, style }) => {
+const BaseContainer: FC<IBaseContainer> = ({ children, style, optins }) => {
   const insets = useSafeAreaInsets();
+
+  const contentContainerStyle = StyleSheet.flatten([
+    styles.container,
+    { paddingTop: insets.top, paddingBottom: insets.bottom },
+    style,
+  ]);
+
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <View
-        style={[
-          {
-            flex: 1,
-            paddingTop: insets.top,
-            paddingBottom: insets.bottom,
-            paddingHorizontal: 24,
-          },
-          style,
-        ]}
+      <ScrollView
+        style={{
+          backgroundColor: optins?.bounceBackgroundColor || "white",
+        }}
+        {...optins}
+        contentContainerStyle={contentContainerStyle}
       >
         {children}
-      </View>
+      </ScrollView>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 24,
+  },
+});
 
 export default BaseContainer;
